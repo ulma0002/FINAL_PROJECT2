@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.poly.final_project.MainActivity">
+
+    <!-- Button Used -->
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Button1"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPink"
+            android:drawableTop="@drawable/transport"
+            android:paddingTop="10dp"
+            android:text="@string/text_Button1"
+            android:textSize="15sp"
+            android:textStyle="bold|italic" />
+
+        <Button
+            android:id="@+id/Button2"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorGreen"
+            android:drawableTop="@drawable/medicine"
+            android:paddingTop="10dp"
+            android:text="@string/text_Button2"
+            android:textSize="15sp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Button3"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:drawableTop="@drawable/movie"
+            android:paddingTop="10dp"
+            android:text="@string/text_ImageButton3"
+            android:textSize="15sp"
+            android:textStyle="bold|italic" />
+
+        <Button
+            android:id="@+id/Button4"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorYellow"
+            android:drawableTop="@drawable/quiz"
+            android:paddingTop="10dp"
+            android:text="@string/text_ImageButton4"
+            android:textSize="15sp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+</LinearLayout>
