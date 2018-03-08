@@ -3,6 +3,6 @@
         <string name="app_name">ФИНАЛЬНЫЙ ПРОЕКТ</string>
         <string name="text_Button1">АВТО РАСПИСАНИЕ</string>
         <string name="text_Button2">КЛИНИКА</string>
-        <string name="text_ImageButton3">АФИША</string>
-        <string name="text_ImageButton4">АНКЕТА!</string>
+        <string name="text_Button3">АФИША</string>
+        <string name="text_Button4">АНКЕТА!</string>
 </resources>
