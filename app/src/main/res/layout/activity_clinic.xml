@@ -6,4 +6,45 @@
     android:layout_height="match_parent"
     tools:context="com.example.poly.final_project.ClinicActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/doctorChoice"
+            android:text="@string/which"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:padding="10dp"
+            android:layout_marginTop="50dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/docBtn"
+            android:text="@string/doc"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/denBtn"
+            android:text="@string/den"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/optBtn"
+            android:text="@string/opt"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

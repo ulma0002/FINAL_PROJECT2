@@ -19,7 +19,8 @@
         <activity android:name=".MoviesActivity" />
         <activity android:name=".TransportActivity" />
         <activity android:name=".ClinicActivity" />
-        <activity android:name=".QuizActivity"></activity>
+        <activity android:name=".QuizActivity" />
+        <activity android:name=".PatientForm"></activity>
     </application>
 
 </manifest>

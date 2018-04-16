@@ -5,4 +5,11 @@
         <string name="text_Button2">КЛИНИКА</string>
         <string name="text_Button3">АФИША</string>
         <string name="text_Button4">АНКЕТА!</string>
+
+        <string name="doc">Врач</string>
+        <string name="den">Дантист</string>
+        <string name="opt">оптик</string>
+
+        <string name="which">Какую кандидатуру врача вы хотите забронировать?</string>
+
 </resources>

@@ -4,4 +4,11 @@
     <string name="text_Button2">CLINIC</string>
     <string name="text_ImageButton3">MOVIES</string>
     <string name="text_ImageButton4">TAKE A QUIZ!</string>
+
+    <string name="doc">Doctor</string>
+    <string name="den">Dentist</string>
+    <string name="opt">Optometrist</string>
+
+    <string name="which">Which Doctor appointment you want to book?</string>
+
 </resources>
