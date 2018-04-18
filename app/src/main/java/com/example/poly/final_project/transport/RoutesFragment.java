@@ -1,3 +1,10 @@
+/**
+ * Oc Transpo App
+ *
+ * @author  Sohaila Binte Ridwan
+ * @version 1.1
+ * @since   2018-04-18
+ */
 package com.example.poly.final_project.transport;
 
 
@@ -16,13 +23,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.poly.final_project.R;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;

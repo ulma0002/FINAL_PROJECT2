@@ -1,5 +1,12 @@
-package com.example.poly.final_project.transport;
+/**
+ * Oc Transpo App
+ *
+ * @author  Sohaila Binte Ridwan
+ * @version 1.1
+ * @since   2018-04-18
+ */
 
+package com.example.poly.final_project.transport;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -64,6 +71,7 @@ public class RouteDetailsFragment extends Fragment {
     ProgressDialog progressDialog;
 
     @Override
+    // Method to show route details
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -136,6 +144,7 @@ public class RouteDetailsFragment extends Fragment {
 //        }
     }
 
+    // Class to asynchronously fetch and parse route information using OcTranspo API
     private class AsyncTripsDownloader extends AsyncTask<String, String, ArrayList<HashMap>> {
 
         private final String API_KEY = "ab27db5b435b8c8819ffb8095328e775";

@@ -1,3 +1,11 @@
+/**
+ * Oc Transpo App
+ *
+ * @author  Sohaila Binte Ridwan
+ * @version 1.1
+ * @since   2018-04-18
+ */
+
 package com.example.poly.final_project.transport;
 
 import android.content.ContentValues;
@@ -24,7 +32,9 @@ import com.example.poly.final_project.R;
 
 import java.util.ArrayList;
 
-
+/*
+* This class manages user interaction with bus stop number
+*/
 public class BusStopFragment extends Fragment {
 
     public static final String TAG = "BusStopFragment";
@@ -97,6 +107,9 @@ public class BusStopFragment extends Fragment {
         return view;
     }
 
+    /*
+     * this method adds a new bus stop number in the UI from user
+     */
     private void processBusStopOperation(final Context context, final boolean insert){
         input_text = new EditText(context);
         input_text.setInputType(InputType.TYPE_CLASS_NUMBER);

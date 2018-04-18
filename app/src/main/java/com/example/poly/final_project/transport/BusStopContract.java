@@ -1,3 +1,10 @@
+/**
+ * OcTranspoApp
+ *
+ * @author  Sohaila Binte Ridwan
+ * @version 1.1
+ * @since   2018-04-18
+ */
 package com.example.poly.final_project.transport;
 
 import android.provider.BaseColumns;

@@ -1,3 +1,10 @@
+/**
+ * Oc Transpo App
+ *
+ * @author  Sohaila Binte Ridwan
+ * @version 1.1
+ * @since   2018-04-18
+ */
 package com.example.poly.final_project;
 
 import android.app.Activity;
@@ -63,7 +70,7 @@ public class TransportActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.octranspo_menu, menu);
         return true;
     }
-
+// Help menu
     private void showHelp(){
         new android.support.v7.app.AlertDialog.Builder(this)
                 .setTitle("Help")
@@ -71,7 +78,13 @@ public class TransportActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                     }
-                }).setMessage("Author: Sohaila Ridwan\nVersion: 1.1\nUser guide: Click 'Bus Stops' and select 'ADD BUS STOP' button to enter bus stop number which you want to get information about. Then select 'ROUTS' to see detail information of the bus routs of that bus stop. Click on the stop number with bus route from the list to see trip detail including gps speed. Thank you!").show();
+                }).setMessage("Author: Sohaila Ridwan" +
+                "\nVersion: 1.1" +
+                "\nUser Guide: " +
+                "\n (1) Select 'BUS STOPS' and select 'ADD BUS STOP' button to enter bus stop number. " +
+                "\n (2) Then select 'ROUTES' to see detail information of all bus routes for the bus stop. " +
+                "\n (3) In the 'ROUTES' screen for a bus stop, tap on any list items to see trip schedule details." +
+                "\n (4) Supports Russian as second language. Thank you!").show();
     }
 
     @Override
