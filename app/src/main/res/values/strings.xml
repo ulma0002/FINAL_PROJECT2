@@ -4,4 +4,19 @@
     <string name="text_Button2">CLINIC</string>
     <string name="text_ImageButton3">MOVIES</string>
     <string name="text_ImageButton4">TAKE A QUIZ!</string>
+
+    <!-- Transport -->
+    <string name="bus_stops_btn">Bus Stops</string>
+    <string name="routes_btn">Routes</string>
+    <string name="add_bus_stop_btn">Add Bus Stop</string>
+    <string name="remove_bus_stop_btn">Remove Bus Stop</string>
+    <string name="trips_title">Scheduled Trips</string>
+    <string name="route">Route</string>
+    <string name="route_name">Name</string>
+    <string name="route_direction">Direction</string>
+    <string name="trip_destination">Destination</string>
+    <string name="trip_starttime">Start Time</string>
+    <string name="trip_adjusted_time">Adjusted Time</string>
+    <string name="trip_location">Location</string>
+    <string name="trip_gps_speed">GPS Speed</string>
 </resources>

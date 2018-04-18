@@ -5,4 +5,19 @@
         <string name="text_Button2">КЛИНИКА</string>
         <string name="text_Button3">АФИША</string>
         <string name="text_Button4">АНКЕТА!</string>
+
+        <!-- Transport -->
+        <string name="bus_stops_btn">Автобусные остановки</string>
+        <string name="routes_btn">Маршруты</string>
+        <string name="add_bus_stop_btn">Добавить автобусную остановку</string>
+        <string name="remove_bus_stop_btn">Удалить автобусную остановку</string>
+        <string name="route">маршрут</string>
+        <string name="route_name">имя</string>
+        <string name="route_direction">направление</string>
+        <string name="trips_title">Запланированные поездки</string>
+        <string name="trip_destination">Место назначения</string>
+        <string name="trip_starttime">Время начала</string>
+        <string name="trip_adjusted_time">Скорректированное время</string>
+        <string name="trip_location">Место нахождения</string>
+        <string name="trip_gps_speed">Скорость GPS</string>
 </resources>
