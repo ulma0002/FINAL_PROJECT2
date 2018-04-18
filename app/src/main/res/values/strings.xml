@@ -8,7 +8,17 @@
     <string name="doc">Doctor</string>
     <string name="den">Dentist</string>
     <string name="opt">Optometrist</string>
-
     <string name="which">Which Doctor appointment you want to book?</string>
+    
+    <string name="patForm">Patient Form</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="address">Address</string>
+    <string name="birth">Birthday</string>
+    <string name="phone">Phone Number</string>
+    <string name="health">Health Card Number</string>
+    <string name="reason">Reason for visitation</string>
+    <string name="save">Save and Next</string>
+    <string name="back">Back</string>
 
 </resources>

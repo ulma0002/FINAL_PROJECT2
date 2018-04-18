@@ -9,7 +9,17 @@
         <string name="doc">Врач</string>
         <string name="den">Дантист</string>
         <string name="opt">оптик</string>
-
         <string name="which">Какую кандидатуру врача вы хотите забронировать?</string>
+
+        <string name="patForm">Форма пациента</string>
+        <string name="firstName">Имя</string>
+        <string name="lastName">Фамилия</string>
+        <string name="address">Адрес</string>
+        <string name="birth">день рождения</string>
+        <string name="phone">Номер телефона</string>
+        <string name="health">Номер карточки здоровья</string>
+        <string name="reason">Причина посещения</string>
+        <string name="save">Сохранить и затем</string>
+        <string name="back">назад</string>
 
 </resources>
