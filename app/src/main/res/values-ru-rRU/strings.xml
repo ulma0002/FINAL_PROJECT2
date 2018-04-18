@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+        <string name="help">Помогите</string>
+
         <string name="app_name">ФИНАЛЬНЫЙ ПРОЕКТ</string>
         <string name="text_Button1">АВТО РАСПИСАНИЕ</string>
         <string name="text_Button2">КЛИНИКА</string>
@@ -7,6 +9,7 @@
         <string name="text_Button4">АНКЕТА!</string>
 
         <!-- Transport -->
+        <string name="octranspoapp">Автобусные маршруты OC Transpo</string>
         <string name="bus_stops_btn">Автобусные остановки</string>
         <string name="routes_btn">Маршруты</string>
         <string name="add_bus_stop_btn">Добавить автобусную остановку</string>
