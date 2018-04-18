@@ -1,7 +1,17 @@
 <resources>
-    <string name="app_name">FINAL_PROJECT</string>
+    <string name="app_name">MOVIE INFO</string>
     <string name="text_Button1">BUS ROUTE</string>
     <string name="text_Button2">CLINIC</string>
     <string name="text_ImageButton3">MOVIES</string>
+    <string name="ProgressBar">Progress Bar</string>
+    <string name="button_create">Create</string>
     <string name="text_ImageButton4">TAKE A QUIZ!</string>
+    <string name="button_Add_movie">ADD NEW</string>
+    <string name="length">Length</string>
+    <string name="actors">Actors</string>
+    <string name="title">Title</string>
+    <string name="highest_result">Statistics on the movie rating: Highest</string>
+    <string name="lowest_result">, Lowest</string>
+    <string name="average_result">, Average</string>
+
 </resources>

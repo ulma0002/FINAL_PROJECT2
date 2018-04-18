@@ -10,7 +10,8 @@
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -20,9 +21,9 @@
             android:layout_weight="1"
             android:background="@color/colorPink"
             android:drawableTop="@drawable/transport"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:text="@string/text_Button1"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:textStyle="bold|italic" />
 
         <Button
@@ -32,16 +33,17 @@
             android:layout_weight="1"
             android:background="@color/colorGreen"
             android:drawableTop="@drawable/medicine"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:text="@string/text_Button2"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:textStyle="bold|italic" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -51,9 +53,9 @@
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:drawableTop="@drawable/movie"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:text="@string/text_ImageButton3"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:textStyle="bold|italic" />
 
         <Button
@@ -63,9 +65,9 @@
             android:layout_weight="1"
             android:background="@color/colorYellow"
             android:drawableTop="@drawable/quiz"
-            android:paddingTop="10dp"
+            android:paddingTop="12dp"
             android:text="@string/text_ImageButton4"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:textStyle="bold|italic" />
     </LinearLayout>
 </LinearLayout>

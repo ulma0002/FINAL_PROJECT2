@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:aзз="http://schemas.android.com/tools">
+
+<item
+    android:id="@+id/action_three"
+    android:icon="@drawable/medicine_1toolbar"
+    android:orderInCategory="101"
+    android:title="Choice3"
+    app:showAsAction="always" />
+<item
+    android:id="@+id/action_one"
+    android:icon="@drawable/transport_toolbar"
+    android:orderInCategory="102"
+    android:title="Choice1"
+    app:showAsAction="always" />
+<item
+    android:id="@+id/action_two"
+    android:layout_width="wrap_content"
+    android:icon="@drawable/quiz_toolbar"
+    android:orderInCategory="103"
+    android:title="Choice2"
+    app:showAsAction="always" />
+<item
+    android:id="@+id/action_about"
+    android:orderInCategory="104"
+    android:title="About author"
+    aзз:showAsAction="never" />
+
+    <item
+        android:id="@+id/data_load"
+        android:orderInCategory="107"
+        android:title="Data"
+        aзз:showAsAction="never" />
+
+    <item
+        android:id="@+id/report_load"
+        android:orderInCategory="108"
+        android:title="Report"
+        aзз:showAsAction="never" />
+
+</menu>

@@ -3,7 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="color_divider">#FF8800</color>
+    <color name="translucent_orange">#80FF8800</color>
+    <color name="light_blue">#0099CC</color>
+    <color name="color_selector">#0f0</color>
+    <color name="background_color">#F0FF00</color>
     <color name="colorYellow">#E6CF00</color>
     <color name="colorGreen">#009300</color>
     <color name="colorPink">#FA8072</color>
+    <color name="black">#000000</color>
+    <color name="toolbar_background">#E0E0E0</color>
+    <color name="background">#FFF7DA</color>
+
 </resources>
