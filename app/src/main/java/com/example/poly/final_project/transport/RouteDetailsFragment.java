@@ -1,6 +1,7 @@
 package com.example.poly.final_project.transport;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,6 +60,8 @@ public class RouteDetailsFragment extends Fragment {
     ListView trips_listview;
     TripsAdapter tripsAdapter;
     ArrayList<HashMap> trips = new ArrayList<HashMap>();
+
+    ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -142,6 +145,17 @@ public class RouteDetailsFragment extends Fragment {
 
         private String bus_stop_no;
         private String route_no;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle(getString(R.string.wait));
+            progressDialog.setTitle(getString(R.string.fetch_route_info));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
 
         @Override
         protected ArrayList<HashMap> doInBackground(String... strings) {
@@ -425,6 +439,7 @@ public class RouteDetailsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<HashMap> hashMaps) {
+            progressDialog.dismiss();
             trips.addAll(hashMaps);
             tripsAdapter.notifyDataSetChanged();
         }

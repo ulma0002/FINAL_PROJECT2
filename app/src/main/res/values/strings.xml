@@ -9,6 +9,8 @@
 
     <!-- Transport -->
     <string name="octranspoapp">OC Transpo Bus Routes</string>
+    <string name="wait">Please Wait</string>
+    <string name="fetch_route_info">Fetching route information ...</string>
     <string name="bus_stops_btn">Bus Stops</string>
     <string name="routes_btn">Routes</string>
     <string name="add_bus_stop_btn">Add Bus Stop</string>

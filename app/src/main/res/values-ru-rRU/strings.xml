@@ -10,6 +10,8 @@
 
         <!-- Transport -->
         <string name="octranspoapp">Автобусные маршруты OC Transpo</string>
+        <string name="wait">Пожалуйста, подождите</string>
+        <string name="fetch_route_info">Получение информации о маршруте ...</string>
         <string name="bus_stops_btn">Автобусные остановки</string>
         <string name="routes_btn">Маршруты</string>
         <string name="add_bus_stop_btn">Добавить автобусную остановку</string>

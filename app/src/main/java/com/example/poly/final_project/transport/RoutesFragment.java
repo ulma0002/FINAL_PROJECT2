@@ -1,6 +1,7 @@
 package com.example.poly.final_project.transport;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -43,6 +44,8 @@ public class RoutesFragment extends Fragment {
     RoutesAdapter routesAdapter;
     Cursor bus_stop_cursor;
     OCTranspoDbHelper dbHelper;
+
+    ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,6 +146,17 @@ public class RoutesFragment extends Fragment {
         private final String QUERY = String.format("%s?appID=%s&&apiKey=%s&stopNo=%s", BASE_URL, APP_ID, API_KEY, "%d");
 
         private Integer bus_stop_no;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle(getString(R.string.wait));
+            progressDialog.setTitle(getString(R.string.fetch_route_info));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
 
         @Override
         protected ArrayList<HashMap> doInBackground(ArrayList<Integer>... integers) {
@@ -291,6 +305,7 @@ public class RoutesFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<HashMap> hashMaps) {
+            progressDialog.dismiss();
             routes = hashMaps;
             routesAdapter.notifyDataSetChanged();
         }
