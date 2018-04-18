@@ -72,11 +72,11 @@ public class RouteDetailsFragment extends Fragment {
         route_direction = getArguments().getString(TAG_RouteDirection);
 
         textView_route_no = (TextView) view.findViewById(R.id.route_no);
-        textView_route_no.setText(R.string.route+": " + route_no);
+        textView_route_no.setText(getString(R.string.route)+": " + route_no);
         textView_route_heading = (TextView) view.findViewById(R.id.route_heading);
-        textView_route_heading.setText(R.string.route_name+": " + route_heading);
+        textView_route_heading.setText(getString(R.string.route_name)+": " + route_heading);
         textView_route_direction = (TextView) view.findViewById(R.id.route_direction);
-        textView_route_direction.setText(R.string.route_direction": " + route_direction);
+        textView_route_direction.setText(getString(R.string.route_direction) + ": " + route_direction);
 
         trips_listview = (ListView) view.findViewById(R.id.trips_listview);
         tripsAdapter = new TripsAdapter(getContext());
@@ -110,19 +110,19 @@ public class RouteDetailsFragment extends Fragment {
             HashMap<String, String> route = getItem(position);
 
             TextView trip_destination = (TextView) result.findViewById(R.id.trip_destination);
-            trip_destination.setText(R.string.trip_destination + ": " + route.get(TAG_TripDestination));
+            trip_destination.setText(getString(R.string.trip_destination) + ": " + route.get(TAG_TripDestination));
 
             TextView trip_starttime = (TextView) result.findViewById(R.id.trip_start_time);
-            trip_starttime.setText(R.string.trip_starttime + ": " + route.get(TAG_TripStartTime));
+            trip_starttime.setText(getString(R.string.trip_starttime) + ": " + route.get(TAG_TripStartTime));
 
             TextView trip_adjusted_time = (TextView) result.findViewById(R.id.trip_adjusted_time);
-            trip_adjusted_time.setText(R.string.trip_adjusted_time + ": " + route.get(TAG_TripAdjustedTime));
+            trip_adjusted_time.setText(getString(R.string.trip_adjusted_time) + ": " + route.get(TAG_TripAdjustedTime));
 
             TextView trip_location = (TextView) result.findViewById(R.id.trip_lat_lng);
-            trip_location.setText(R.string.trip_location + " (Lat,Lng): " + route.get(TAG_TripLatitude)+","+route.get(TAG_TripLongitude));
+            trip_location.setText(getString(R.string.trip_location) + " (Lat,Lng): " + route.get(TAG_TripLatitude)+","+route.get(TAG_TripLongitude));
 
             TextView trip_gps_speed = (TextView) result.findViewById(R.id.trip_gps_speed);
-            trip_gps_speed.setText(R.string.trip_gps_speed + ": " + route.get(TAG_TripGPSSpeed));
+            trip_gps_speed.setText(getString(R.string.trip_gps_speed) + ": " + route.get(TAG_TripGPSSpeed));
 
             return result;
         }
