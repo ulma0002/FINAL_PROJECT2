@@ -1,5 +1,6 @@
 package com.example.poly.final_project;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
@@ -26,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -48,17 +48,23 @@ public class MoviesActivity extends AppCompatActivity {
 
     protected static final String ACTIVITY_NAME = "MoviesActivity";
     ArrayList<Movie> movies_list = new ArrayList<>();
-    ArrayList<Long>  movies_ID   = new ArrayList<>();
+    //ArrayList<Long>  movies_ID   = new ArrayList<>();
     ListView       listView;
     Button         buttonAdd;
-    //EditText       moviesText;
     MoviesAdapter  moviesAdapter;
     Cursor         cursor;
     SQLiteDatabase db;
     ProgressBar    progressBar;
     Toolbar        toolbar;
     private boolean isTablet;
-    private boolean importedFromXml = false;
+    private boolean dataDownload = false;
+    boolean isTitle       = false;
+    boolean isActors      = false;
+    boolean isLength      = false;
+    boolean isDescription = false;
+    boolean isRating      = false;
+    boolean isGenre       = false;
+    boolean isUrl         = false;
 
     private String title;
     private String actors;
@@ -67,7 +73,7 @@ public class MoviesActivity extends AppCompatActivity {
     private String rating; //rating (out of 4 starts)
     private String genre; //(comedy, horror, action…)
     private String url; //url of the movie poster
-    private long id;
+    private long   id;
     Bitmap pic;
 
     Double high_rating = 0.0;
@@ -78,13 +84,16 @@ public class MoviesActivity extends AppCompatActivity {
 
 
     public class MoviesAdapter extends ArrayAdapter<Movie> {
-        //constructor for ChatAdapter that takes a Context parameter,
+        //constructor for MoviesAdapter that takes a Context parameter,
         // and passes it to the parent constructor (ArrayAdapter)
-        MoviesAdapter(Context ctx)
-
-        {
-            super(ctx, 0);
+        public MoviesAdapter(Activity context, ArrayList<Movie> movies_list)  {
+            super(context, 0, movies_list); //passing the context, layout resource ID and a list of objects
         }
+//        MoviesAdapter(Context ctx)
+//
+//        {
+//            super(ctx, 0);
+//        }
 
         @Override
         public int getCount()
@@ -105,40 +114,45 @@ public class MoviesActivity extends AppCompatActivity {
         public long getItemId(int position) {
 //returns the database id of the item at position i
 
-            return movies_ID.get(position);
-            //return position;
+            return movies_list.get(position).getId();
+
         }
 
         //then iterates in a for loop, calling  getView(int position)
         @Override
         public View getView(int position, View result, ViewGroup parent) {
-            LayoutInflater inflater = MoviesActivity.this.getLayoutInflater();
-            View           resList  = result;
-           // if (resList == null) {
-                result = inflater.inflate(R.layout.movie_row_line, null);//set movie_row_line for displaying items
-            //}
+           LayoutInflater inflater = MoviesActivity.this.getLayoutInflater();
+           // View           resList  = result;
+             if (result == null) {
+
+                 result =inflater.inflate(R.layout.movie_row_line, null);//set layout for displaying items
+                         //LayoutInflater.from(getContext()).inflate(R.layout.movie_row_line, parent, false);//set movie_row_line for displaying items
+           }
 
             Movie myMovie = getItem(position);
 
             TextView movies_title = result.findViewById(R.id.title);//get id for  view
             movies_title.setText(myMovie.getTitle());
+
             TextView movies_actor = result.findViewById(R.id.actors);
             movies_actor.setText(myMovie.getActors());
+
             TextView movies_length = result.findViewById(R.id.length);
             movies_length.setText(myMovie.getLength());
 
-            ImageView       imageView = result.findViewById(R.id.image);
-            String url       = myMovie.getUrl();
-            String          fileName  = url.substring(url.lastIndexOf(':') + 1);
-            FileInputStream fis       = null;
+            ImageView       image    = result.findViewById(R.id.image);
+            String          url      = myMovie.getUrl();
+            String          fileName = url.substring(url.lastIndexOf(':') + 1);
+            FileInputStream fis      = null;
             try {
+
                 fis = openFileInput(fileName + ".png");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             pic = BitmapFactory.decodeStream(fis);
 
-            imageView.setImageBitmap(pic);
+            image.setImageBitmap(pic);
             return result;//this returns the movie_row_line that will be positioned at the specified row in the list
         }
     }
@@ -149,23 +163,51 @@ public class MoviesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
 
+        //isTablet = findViewById(R.id.frameLayout) != null;
+
+        listView = findViewById(R.id.list_View);
+        buttonAdd = findViewById(R.id.button_Add_movie);
+
+        moviesAdapter = new MoviesAdapter(this, movies_list);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+
         //creates a temporary ChatDatabaseHelper object
         MovieDatabaseHelper movieDbHelper = new MovieDatabaseHelper(this);
 
         // gets a writable database and stores that as an instance variable
         db = movieDbHelper.getWritableDatabase();
 
-         isTablet = findViewById(R.id.frameLayout) != null;
 
-        listView = findViewById(R.id.list_View);
-        buttonAdd = findViewById(R.id.button_Add_movie);
 
-        moviesAdapter = new MoviesAdapter(this);
+        cursor = db.query(MovieDatabaseHelper.TABLE_NAME,
+                new String[]{MovieDatabaseHelper.KEY_ID, MovieDatabaseHelper.KEY_TITLE, MovieDatabaseHelper.KEY_ACTORS,
+                        MovieDatabaseHelper.KEY_LENGTH, MovieDatabaseHelper.KEY_DESCRIPTION, MovieDatabaseHelper.KEY_RATING, MovieDatabaseHelper.KEY_GENRE, MovieDatabaseHelper.KEY_URL},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        while (!cursor.isAfterLast()) {
 
-        progressBar = findViewById(R.id.progressBar);
+            movies_list.add(new Movie(cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ACTORS)),
+                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_LENGTH)),
+                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_RATING)),
+                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_GENRE)),
+                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_URL)),
+                    new Long(cursor.getInt(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ID)))));
+            cursor.moveToNext();
+        }
+        listView.setAdapter(moviesAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -179,25 +221,25 @@ public class MoviesActivity extends AppCompatActivity {
                 bundle.putString("genre", movies_list.get(i).getGenre());
                 bundle.putString("url", movies_list.get(i).getUrl());
                 bundle.putLong("ID", id);
-//if on tablet:
-                if(!isTablet)//this is a phone
-                 {
-                Intent goTo = new Intent(MoviesActivity.this, MovieDetails.class);
-                goTo.putExtras(bundle);
-                startActivityForResult(goTo, 1);
+////if on tablet:
+//                if (isTablet)//this is a Tablet
+//                {
+//                    FragmentManager     fragmentManager     = getFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    //movieFragment.setIsTablet(true);
+//                    movieFragment.setArguments(bundle);
+//                    fragmentTransaction.addToBackStack(" ") //You can call transaction.addToBackStack(String name) if you want to undo this transaction
+//                            // with the back button. Otherwise the back button changes the Activity. The name parameter is optional.
+//                            .replace(R.id.frameLayout, movieFragment)
+//                            .commit();
+//
+//                } else //this is phone
+//                {
 
-                }
-               else //this is Tablet
-                {
-                    FragmentManager     fragmentManager     = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    //movieFragment.setIsTablet(true);
-                    movieFragment.setArguments( bundle );
-                    fragmentTransaction.addToBackStack(" ") //You can call transaction.addToBackStack(String name) if you want to undo this transaction
-                            // with the back button. Otherwise the back button changes the Activity. The name parameter is optional.
-                            .replace( R.id.frameLayout , movieFragment)
-                            .commit();
-                }
+                    Intent goTo = new Intent(MoviesActivity.this, MovieDetails.class);
+                    goTo.putExtras(bundle);
+                    startActivityForResult(goTo, 20);
+                //}
             }
         });
 
@@ -207,29 +249,7 @@ public class MoviesActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(MoviesActivity.this, MovieFavorite.class), 5);
             }
         });
-        cursor = db.query(true, MovieDatabaseHelper.TABLE_NAME, new String[]
-                        {MovieDatabaseHelper.KEY_ID, MovieDatabaseHelper.KEY_TITLE},
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-        cursor.moveToFirst();
 
-        while (!cursor.isAfterLast()) {
-
-            movies_list.add(new Movie(cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ID)),
-                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ACTORS)),
-                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_LENGTH)),
-                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_DESCRIPTION)),
-                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_RATING)),
-                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_GENRE)),
-                    cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_URL)),
-                    new Long(cursor.getInt(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ID)))));
-            cursor.moveToNext();
-        }
-        listView.setAdapter(moviesAdapter);
     }
 
 
@@ -240,10 +260,9 @@ public class MoviesActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem mi) {
-        int                 id = mi.getItemId();
-        AlertDialog.Builder builder;
+        int pose = mi.getItemId();
 
-        switch (id) {
+        switch (pose) {
             case R.id.action_one:
                 Intent clinic_intent = new Intent(MoviesActivity.this, ClinicActivity.class);
                 startActivityForResult(clinic_intent, 50);
@@ -258,18 +277,19 @@ public class MoviesActivity extends AppCompatActivity {
                 startActivityForResult(quiz_intent, 50);
                 break;
             case R.id.action_about:
+                AlertDialog.Builder builder;
                 Log.d("Toolbar", "Action about selected");
-                builder = new AlertDialog.Builder(this);
-                builder.setTitle("Movie Activity version 1.0 was created by Galina Ulman.");
+                builder = new AlertDialog.Builder(MoviesActivity.this);
+                builder.setTitle("Movie Activity version 1.0 was created by Galina Ulman");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int id) {
 
                     }
                 });
                 builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int id) {
                         finish();
                     }
                 });
@@ -280,54 +300,97 @@ public class MoviesActivity extends AppCompatActivity {
                 break;
             case R.id.data_load:
                 new MovieQuery().execute();
-                if (importedFromXml)
-                    Snackbar.make(getWindow().getDecorView().getRootView(),"Movies were successfully imported", Snackbar.LENGTH_LONG)
+                if (dataDownload)
+                    Snackbar.make(getWindow().getDecorView().getRootView(), "Movies were successfully imported", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                importedFromXml=false;
+                dataDownload = false;
                 break;
+
             case R.id.report_load:
                 //--------------statistics on the highest, lowest, and average movie rating--------------
-                int k=0;
-                average_rating =0.0;
-                for (int i=0;  i < movies_list.size(); i++ ) {
+                int k = 0;
+                average_rating = 0.0;
+                for (int i = 0; i < movies_list.size(); i++) {
                     try {
-                        Double itemRating = Double.parseDouble(movies_list.get(i).getRating());
-                        average_rating += itemRating;
-                        if (itemRating> high_rating) high_rating = itemRating;
-                        if (itemRating< low_rating) low_rating = itemRating;
+                        Double rate = Double.parseDouble(movies_list.get(i).getRating());
+                        average_rating += rate;
+                        if (rate > high_rating) high_rating = rate;
+                        if (rate < low_rating) low_rating = rate;
                         k++;
                     } catch (Exception e) {
                         continue;
                     }
                 }
-                average_rating = average_rating/((double)(k));
-                if (low_rating ==5.0) low_rating=0.0;
-                String averageFormated = new DecimalFormat("##.##").format(average_rating);
+                average_rating = average_rating / ((double) (k));
+                if (low_rating == 5.0) low_rating = 0.0;
+                String rateFormat = new DecimalFormat("##.##").format(average_rating);
 
-                AlertDialog.Builder builderSummary = new AlertDialog.Builder(MoviesActivity.this);
-                builderSummary.setTitle("Report about stored data: ");
-                builderSummary.setMessage(getString(R.string.highest_result)+" "+high_rating+getString(R.string.lowest_result)+" "+low_rating+getString(R.string.average_result) +" "+averageFormated)
+                AlertDialog.Builder report = new AlertDialog.Builder(MoviesActivity.this);
+                report.setTitle("Report about stored data: ");
+                report.setMessage(getString(R.string.highest_result) + " " + high_rating + getString(R.string.lowest_result) + " " + low_rating + getString(R.string.average_result) + " " + rateFormat)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
-                builderSummary.create().show();
+                report.create().show();
                 break;
-
 
         }
         return true;
     }
 
+
+    public void onActivityResult(int req, int res, Intent data) {
+        if (res == 101) {
+            //id = data.getExtras().getLong("ID");
+            title = data.getExtras().getString("title");
+            actors = data.getExtras().getString("actors");
+            length = data.getExtras().getString("length");
+            description = data.getExtras().getString("description");
+            rating = data.getExtras().getString("rating");
+            genre = data.getExtras().getString("genre");
+            url = data.getExtras().getString("url");
+            //deleteMovie(id);
+
+            ContentValues newInput = new ContentValues();
+            newInput.put(MovieDatabaseHelper.KEY_TITLE, title);
+            newInput.put(MovieDatabaseHelper.KEY_ACTORS, actors);
+            newInput.put(MovieDatabaseHelper.KEY_LENGTH, length);
+            newInput.put(MovieDatabaseHelper.KEY_DESCRIPTION, description);
+            newInput.put(MovieDatabaseHelper.KEY_RATING, rating);
+            newInput.put(MovieDatabaseHelper.KEY_GENRE, genre);
+            newInput.put(MovieDatabaseHelper.KEY_URL, url);
+
+            movies_list.add(new Movie(title, actors, length, description, rating, genre, url,
+                    (db.insert(MovieDatabaseHelper.TABLE_NAME, null, newInput))));
+            Toast.makeText(MoviesActivity.this, "Add movie", Toast.LENGTH_LONG).show();
+        }
+        if (res == 102) // delete movie from list
+        {
+            id = data.getExtras().getLong("ID");
+            deleteMovie(id);
+            Toast.makeText(MoviesActivity.this, "Movie Deleted", Toast.LENGTH_SHORT).show();
+        }
+
+        if (res == 103) // update information in the list
+        {
+            updateMovie(data);
+            Toast.makeText(MoviesActivity.this, "Movie was updated", Toast.LENGTH_SHORT).show();
+        }
+        moviesAdapter.notifyDataSetChanged(); //reload updating
+    }
+
+
     public void deleteMovie(long id) {
         db.delete(MovieDatabaseHelper.TABLE_NAME, "ID is ?", new String[]{Long.toString(id)});
-        if (isTablet) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.remove(movieFragment)
-                    .commit();
-        }
+//        if (isTablet) {
+//            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//            fragmentTransaction.remove(movieFragment)
+//                    .commit();
+//        }
         cursor = db.query(MovieDatabaseHelper.TABLE_NAME,
-                new String[]{MovieDatabaseHelper.KEY_ID, MovieDatabaseHelper.KEY_TITLE},
+                new String[]{MovieDatabaseHelper.KEY_ID, MovieDatabaseHelper.KEY_TITLE, MovieDatabaseHelper.KEY_ACTORS, MovieDatabaseHelper.KEY_LENGTH,
+                        MovieDatabaseHelper.KEY_DESCRIPTION, MovieDatabaseHelper.KEY_RATING, MovieDatabaseHelper.KEY_GENRE, MovieDatabaseHelper.KEY_URL},
                 null,
                 null,
                 null,
@@ -338,7 +401,7 @@ public class MoviesActivity extends AppCompatActivity {
         //chat_ID = new ArrayList<>();
 
         //remove old messages:
-       // movies_ID.clear();
+        // movies_ID.clear();
         movies_list.clear();
 
 //load new messages:
@@ -347,7 +410,7 @@ public class MoviesActivity extends AppCompatActivity {
 
             //int ind = cursor.getColumnIndex(MovieDatabaseHelper.KEY_ID);
             //movies_ID.add(new Long(cursor.getInt(ind)));
-            movies_list.add(new Movie(cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ID)),
+            movies_list.add(new Movie(cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_TITLE)),
                     cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ACTORS)),
                     cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_LENGTH)),
                     cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_DESCRIPTION)),
@@ -357,72 +420,45 @@ public class MoviesActivity extends AppCompatActivity {
                     new Long(cursor.getInt(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ID)))));
             cursor.moveToNext();
         }
-        moviesAdapter.notifyDataSetChanged();//reload table
+        moviesAdapter.notifyDataSetChanged();//update table
     }
 
-    public void onActivityResult(int req, int res, Intent data) {
-        if (res == 10) {
-            id = data.getExtras().getLong("ID");
-            title=data.getExtras().getString("TITLE");
-            actors=data.getExtras().getString("ACTORS");
-            length=data.getExtras().getString("LENGTH");
-            description=data.getExtras().getString("DESCRIPTION");
-            rating=data.getExtras().getString("RATING");
-            genre=data.getExtras().getString("GENRE");
-            url=data.getExtras().getString("URL");
-            //deleteMovie(id);
-
-            ContentValues newData = new ContentValues();
-            newData.put(MovieDatabaseHelper.KEY_TITLE, title);
-            newData.put(MovieDatabaseHelper.KEY_ACTORS, actors);
-            newData.put(MovieDatabaseHelper.KEY_LENGTH, length);
-            newData.put(MovieDatabaseHelper.KEY_DESCRIPTION, description);
-            newData.put(MovieDatabaseHelper.KEY_RATING, rating);
-            newData.put(MovieDatabaseHelper.KEY_GENRE, genre);
-            newData.put(MovieDatabaseHelper.KEY_URL, url);
-
-            movies_list.add(new Movie(title, actors,  length,  description, rating,  genre,  url, (db.insert(MovieDatabaseHelper.TABLE_NAME, null, newData))));
-            Toast.makeText(MoviesActivity.this, "Add movie", Toast.LENGTH_LONG);
-        }
-        if(res == 20) // delete a movie
-        {
-            long id=data.getExtras().getLong("ID");
-            deleteMovie(id);
-            Toast.makeText(MoviesActivity.this, "Movie Deleted", Toast.LENGTH_SHORT).show();
-        }
-
-        if(res == 30) // update a movie
-        {
-            updateMovie(data);
-            Toast.makeText(MoviesActivity.this, "Movie is updated", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void updateMovie(Intent data) {
-        long id=data.getExtras().getLong("ID");
+        id = data.getExtras().getLong("ID");
 
-        String title=data.getExtras().getString("TITLE");
-        String actors=data.getExtras().getString("ACTORS");
-        String length=data.getExtras().getString("LENGTH");
-        String description=data.getExtras().getString("DESCRIPTION");
-        String rating=data.getExtras().getString("RATING");
-        String genre=data.getExtras().getString("GENRE");
-        String url=data.getExtras().getString("URL");
+        title = data.getExtras().getString("title");
+        actors = data.getExtras().getString("actors");
+        length = data.getExtras().getString("length");
+        description = data.getExtras().getString("description");
+        rating = data.getExtras().getString("rating");
+        genre = data.getExtras().getString("genre");
+        url = data.getExtras().getString("url");
 
-        ContentValues newData = new ContentValues();
-        newData.put(MovieDatabaseHelper.KEY_TITLE, title);
-        newData.put(MovieDatabaseHelper.KEY_ACTORS, actors);
-        newData.put(MovieDatabaseHelper.KEY_LENGTH, length);
-        newData.put(MovieDatabaseHelper.KEY_DESCRIPTION, description);
-        newData.put(MovieDatabaseHelper.KEY_RATING, rating);
-        newData.put(MovieDatabaseHelper.KEY_GENRE, genre);
-        newData.put(MovieDatabaseHelper.KEY_URL, url);
+        ContentValues updateInput = new ContentValues();
+        updateInput.put(MovieDatabaseHelper.KEY_TITLE, title);
+        updateInput.put(MovieDatabaseHelper.KEY_ACTORS, actors);
+        updateInput.put(MovieDatabaseHelper.KEY_LENGTH, length);
+        updateInput.put(MovieDatabaseHelper.KEY_DESCRIPTION, description);
+        updateInput.put(MovieDatabaseHelper.KEY_RATING, rating);
+        updateInput.put(MovieDatabaseHelper.KEY_GENRE, genre);
+        updateInput.put(MovieDatabaseHelper.KEY_URL, url);
 
-        db.update(MovieDatabaseHelper.TABLE_NAME, newData, "ID="+id, null);
+        db.update(MovieDatabaseHelper.TABLE_NAME, updateInput, "ID=" + id, null);
 
         movies_list.clear();
-        cursor.moveToFirst();
-        while(!cursor.isAfterLast() ) {
+        cursor = db.query(true,MovieDatabaseHelper.TABLE_NAME, new String[]
+                      {MovieDatabaseHelper.KEY_ID, MovieDatabaseHelper.KEY_TITLE, MovieDatabaseHelper.KEY_ACTORS, MovieDatabaseHelper.KEY_LENGTH, MovieDatabaseHelper.KEY_DESCRIPTION, MovieDatabaseHelper.KEY_GENRE,
+                                MovieDatabaseHelper.KEY_RATING, MovieDatabaseHelper.KEY_URL},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+                cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
 
             movies_list.add(new Movie(cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_TITLE)),
                     cursor.getString(cursor.getColumnIndex(MovieDatabaseHelper.KEY_ACTORS)),
@@ -435,21 +471,21 @@ public class MoviesActivity extends AppCompatActivity {
 
             cursor.moveToNext();
         }
+
     }
 
     public class MovieQuery extends AsyncTask<String, Integer, String> {
 
-
         @Override
         protected String doInBackground(String... args) {
 
+            //class URL represents a Uniform Resource Locator,
+            // a pointer to a "resource" on the World Wide Web
 
-
+//Get Bitmap from Url with HttpURLConnection
             try {
-                boolean isTitle, isActors, isLength, isDescription, isRating, isGenre, isUrl;
-
-                isTitle = isActors = isLength = isDescription = isRating = isGenre = isUrl = false;
-
+                // Given a string representation of a URL, sets up a connection and gets
+                // an input stream.
                 URL               url1 = new URL("http://torunski.ca/CST2335/MovieInfo.xml");
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setReadTimeout(10000 /* milliseconds */);
@@ -462,13 +498,15 @@ public class MoviesActivity extends AppCompatActivity {
                 XmlPullParser parser = Xml.newPullParser();
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 parser.setInput(conn.getInputStream(), null);
+                parser.nextTag();
                 publishProgress(25);
-                int nextType = parser.next();
-                while ((nextType ) != XmlPullParser.END_DOCUMENT) {
-                    switch (nextType) {
-                        case XmlPullParser.START_TAG: {
+                int type;
+                while ((type = parser.next()) != XmlPullParser.END_DOCUMENT) {
+
+                    switch (type) {
+                        case XmlPullParser.START_TAG:
                             String name = parser.getName();
-                            if(name==null )continue;
+                            if (name == null) continue;
                             if (name.equals("Title")) {
                                 isTitle = true;
                             }
@@ -476,7 +514,7 @@ public class MoviesActivity extends AppCompatActivity {
                                 isActors = true;
                             }
                             if (name.equals("Length")) {
-                                isLength= true;
+                                isLength = true;
                             }
                             if (name.equals("Description")) {
                                 isDescription = true;
@@ -491,9 +529,11 @@ public class MoviesActivity extends AppCompatActivity {
                                 url = parser.getAttributeValue(null, "value");
                                 String fileName = url.substring(url.lastIndexOf(':') + 1);
                                 if (fileExistance(fileName)) {
+                                    //when this file exists
                                     FileInputStream fis = null;
                                     try {
                                         fis = openFileInput(fileName + ".png");
+
                                     } catch (FileNotFoundException e) {
                                         e.printStackTrace();
                                     }
@@ -507,9 +547,9 @@ public class MoviesActivity extends AppCompatActivity {
                                     outputStream.close();
                                 }
                             }
-                        }
 
-                        break;
+
+                            break;
                         case XmlPullParser.TEXT:
                             String text = parser.getText();
                             if (isTitle)
@@ -526,21 +566,22 @@ public class MoviesActivity extends AppCompatActivity {
                                 genre = text;
                             break;
 
-                        case XmlPullParser.END_TAG: {
-                            String name = parser.getName();
+                        case XmlPullParser.END_TAG:
+                            name = parser.getName();
                             if (name.equals("Movie")) {
 
-                                ContentValues newData = new ContentValues();
-                                newData.put(MovieDatabaseHelper.KEY_TITLE, title);
-                                newData.put(MovieDatabaseHelper.KEY_ACTORS, actors);
-                                newData.put(MovieDatabaseHelper.KEY_LENGTH, length);
-                                newData.put(MovieDatabaseHelper.KEY_DESCRIPTION, description);
-                                newData.put(MovieDatabaseHelper.KEY_RATING, rating);
-                                newData.put(MovieDatabaseHelper.KEY_GENRE, genre);
-                                newData.put(MovieDatabaseHelper.KEY_URL, url);
+                                ContentValues getData = new ContentValues();
+                                getData.put(MovieDatabaseHelper.KEY_TITLE, title);
+                                getData.put(MovieDatabaseHelper.KEY_ACTORS, actors);
+                                getData.put(MovieDatabaseHelper.KEY_LENGTH, length);
+                                getData.put(MovieDatabaseHelper.KEY_DESCRIPTION, description);
+                                getData.put(MovieDatabaseHelper.KEY_RATING, rating);
+                                getData.put(MovieDatabaseHelper.KEY_GENRE, genre);
+                                getData.put(MovieDatabaseHelper.KEY_URL, url);
 
-                                movies_list.add(new Movie(title, actors,  length,  description, rating,  genre,  url, (db.insert(MovieDatabaseHelper.TABLE_NAME, null, newData))));
-                                importedFromXml=true;
+                                movies_list.add(new Movie(title, actors, length, description, rating, genre, url, (db.insert(MovieDatabaseHelper.TABLE_NAME, null, getData))));
+
+                                dataDownload = true;
                             }
                             if (name.equals("Title")) {
                                 isTitle = false;
@@ -549,7 +590,7 @@ public class MoviesActivity extends AppCompatActivity {
                                 isActors = false;
                             }
                             if (name.equals("Length")) {
-                                isLength= false;
+                                isLength = false;
                             }
                             if (name.equals("Description")) {
                                 isDescription = false;
@@ -560,13 +601,13 @@ public class MoviesActivity extends AppCompatActivity {
                             if (name.equals("Genre")) {
                                 isGenre = false;
                             }
-                        }
+
 
                     }
                     publishProgress(50);
-                    nextType = parser.next();
+                    //parser.next();
                 }
-                moviesAdapter.notifyDataSetChanged();
+
 
             } catch (Exception e) {
                 Log.d("Exception:", e.getMessage());
@@ -583,7 +624,8 @@ public class MoviesActivity extends AppCompatActivity {
         public void onPostExecute(String result) {
             progressBar.setVisibility(View.INVISIBLE);
             progressBar.setMax(100); // 100 maximum value for the progress value
-            progressBar.setProgress(50); // 50 default progress value for the progress bar
+            progressBar.setProgress(50);
+            moviesAdapter.notifyDataSetChanged();// / 50 default progress value for the progress bar
         }
 
         public Bitmap getImage(String urlString) {
